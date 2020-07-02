@@ -1,0 +1,225 @@
+import React, { useState, useEffect } from 'react';
+import Constants from 'expo-constants';
+import { Feather as Icon } from '@expo/vector-icons'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import MapView, { Marker } from 'react-native-maps';
+import Svg, { SvgUri } from 'react-native-svg';
+import api from '../../services/api';
+import * as Location from 'expo-location';
+
+
+interface Item {
+  id: number;
+  title: string;
+  mobile_url: string;
+}
+
+const Points = () => {
+  const [items, setItems] = useState<Item[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([0 , 0]);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    api.get('items').then(response => {
+      setItems(response.data);
+    })
+  }, []);
+
+  useEffect(() => {
+    async function loadPosition() {
+      const { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Ooops...', 'We need your permission to get your location.');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync();
+      const { latitude, longitude } = location.coords;
+      setInitialPosition([
+        latitude,
+        longitude
+      ]);
+    }
+    loadPosition();
+  }, []);
+
+  function handleSelectItem(id: number) {
+    const alreadySelected = selectedItems.findIndex(item => item === id);
+    if (alreadySelected >= 0) {
+        const filteredItems = selectedItems.filter(item => item !== id);
+        setSelectedItems(filteredItems);
+    } else {
+        setSelectedItems([ ...selectedItems, id]);
+    }
+  }
+
+  function handleNavigateBack() {
+        navigation.goBack();
+    }
+    function handleNavigateToDetail() {
+        navigation.navigate('Detail');
+    }
+    
+    return (
+        <>
+            <View style={styles.container}>
+                <TouchableOpacity onPress={handleNavigateBack}>
+                    <Icon name="arrow-left" size={20} color="#34cb79" />
+                </TouchableOpacity>
+                <Text style={styles.title}>Welcome</Text>
+                <Text style={styles.description}>Find on map a recycle hub.</Text>
+                <View style={styles.mapContainer}>
+                 { initialPosition[0] !== 0 && (
+                      <MapView 
+                      style={styles.map}
+                      initialRegion={{ 
+                          latitude: initialPosition[0],
+                          longitude: initialPosition[1],
+                          latitudeDelta: 0.010,
+                          longitudeDelta: 0.010,
+                       }} 
+                  >
+                      <Marker 
+                          onPress={handleNavigateToDetail}
+                          style={styles.mapMarker}
+                          coordinate={{ 
+                              latitude: -43.5252292,
+                              longitude: 172.6375393,  
+                          }} 
+                      >
+                          <View style={styles.mapMarkerContainer}>
+                              <Image 
+                                  style={styles.mapMarkerImage} 
+                                  source={{ uri: 'https://images.unsplash.com/photo-1556767576-5ec41e3239ea?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60' }} 
+                              />
+                              <Text style={styles.mapMarkerTitle}>Market</Text>
+                          </View>
+                      </Marker>
+                  </MapView>
+                 ) }
+                </View>
+            </View>
+            <View style={styles.itemsContainer}>
+                <ScrollView 
+                    contentContainerStyle={{  paddingHorizontal: 20 }}
+                    horizontal 
+                    showsHorizontalScrollIndicator={false}
+                >
+                    {items.map(item => (
+                      <TouchableOpacity 
+                        activeOpacity={0.7}
+                        key={String(item.id)} 
+                        style={[
+                          styles.item,
+                          selectedItems.includes(item.id) ? styles.selectedItem : {}
+                        ]} 
+                        onPress={() => handleSelectItem(item.id)}>
+                          <SvgUri width={42} height={42} uri={item.mobile_url} />
+                          <Text style={styles.itemTitle}>{item.title}</Text>
+                      </TouchableOpacity> 
+                    ))}
+                </ScrollView>
+            </View>
+        </>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingHorizontal: 32,
+      paddingTop: 20 + Constants.statusBarHeight,
+    },
+  
+    title: {
+      fontSize: 20,
+      fontFamily: 'Ubuntu_700Bold',
+      marginTop: 24,
+    },
+  
+    description: {
+      color: '#6C6C80',
+      fontSize: 16,
+      marginTop: 4,
+      fontFamily: 'Roboto_400Regular',
+    },
+  
+    mapContainer: {
+      flex: 1,
+      width: '100%',
+      borderRadius: 10,
+      overflow: 'hidden',
+      marginTop: 16,
+    },
+  
+    map: {
+      width: '100%',
+      height: '100%',
+    },
+  
+    mapMarker: {
+      width: 90,
+      height: 80, 
+    },
+  
+    mapMarkerContainer: {
+      width: 90,
+      height: 70,
+      backgroundColor: '#34CB79',
+      flexDirection: 'column',
+      borderRadius: 8,
+      overflow: 'hidden',
+      alignItems: 'center'
+    },
+  
+    mapMarkerImage: {
+      width: 90,
+      height: 45,
+      resizeMode: 'cover',
+    },
+  
+    mapMarkerTitle: {
+      flex: 1,
+      fontFamily: 'Roboto_400Regular',
+      color: '#FFF',
+      fontSize: 13,
+      lineHeight: 23,
+    },
+  
+    itemsContainer: {
+      flexDirection: 'row',
+      marginTop: 16,
+      marginBottom: 32,
+    },
+  
+    item: {
+      backgroundColor: '#fff',
+      borderWidth: 2,
+      borderColor: '#eee',
+      height: 120,
+      width: 120,
+      borderRadius: 8,
+      paddingHorizontal: 16,
+      paddingTop: 20,
+      paddingBottom: 16,
+      marginRight: 8,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+  
+      textAlign: 'center',
+    },
+  
+    selectedItem: {
+      borderColor: '#34CB79',
+      borderWidth: 2,
+    },
+  
+    itemTitle: {
+      fontFamily: 'Roboto_400Regular',
+      textAlign: 'center',
+      fontSize: 13,
+    },
+  });
+
+export default Points;
