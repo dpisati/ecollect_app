@@ -1,0 +1,54 @@
+.success-main {
+    background-color: rgb(24, 24, 24);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.button span {
+    background-color: #25af65;
+    width: 64px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+strong {
+    margin-left: 64px;
+}
+.button {
+    font-size: 24px;
+    line-height: 38px;
+    width: 100%;
+    max-width: 360px;
+    height: 72px;
+    background: var(--primary-color);
+    border-radius: 8px;
+    text-decoration: none;  
+    display: flex;
+    align-items: center;
+    overflow: hidden;  
+    margin-top: 84px;
+    color: white;
+}
+.button:hover {
+    background: #2FB86E;
+}
+
+
+.icon {
+    color: var(--primary-color);
+    height: 84px;
+    width: 84px;
+}
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 550px;
+}
+.title-h1 {
+    color: white;
+}
+

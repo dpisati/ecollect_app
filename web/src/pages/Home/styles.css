@@ -1,7 +1,9 @@
 #page-home {
-    height: 100vh;
-  
+    height: 100vh;  
     background: url('../../assets/home-background.svg') no-repeat 700px bottom;
+  }
+  header img {
+    width: 284px;
   }
   
   #page-home .content {
@@ -77,6 +79,7 @@
     flex: 1;
     text-align: center;
     color: #FFF;
+    margin-left: 0px;
   }
   
   #page-home .content main a:hover {

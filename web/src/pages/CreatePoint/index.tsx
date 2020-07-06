@@ -6,7 +6,7 @@ import { LeafletMouseEvent } from 'leaflet';
 import './styles.css';
 import axios from 'axios';
 import api from '../../services/api';
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/logo.png';
 import { Console } from 'console';
 
 interface Item {
@@ -118,9 +118,8 @@ const CreatePoint = () => {
             longitude,
             items
         }
-        await api.post('points', data);
-        alert('Point Created!');        
-        history.push('/');
+        await api.post('points', data);  
+        history.push('/success');        
     }
 
     return (
