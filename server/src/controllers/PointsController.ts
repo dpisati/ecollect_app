@@ -15,13 +15,12 @@ class PointsController {
             .distinct()
             .select('points.*');
 
-            const serializedPoints = points.map(point => {
-                return {
-                    ...points,
-                    image_url: `http://localhost:3333/uploads/${point.image}`,
-                    mobile_url: `http://192.168.2.220:3333/uploads/${point.image}`
-                };
-            });
+        const serializedPoints = points.map(point => {
+            return {
+                ...point,
+                image_url: `http://192.168.2.220:3333/uploads/${point.image}`
+            };
+        });
         
         return response.json(serializedPoints);
     }
@@ -34,8 +33,7 @@ class PointsController {
 
         const serializedPoint = {
             ...point,
-            image_url: `http://localhost:3333/uploads/${point.image}`,
-            mobile_url: `http://192.168.2.220:3333/uploads/${point.image}`
+            image_url: `http://192.168.2.220:3333/uploads/${point.image}`
         };
 
 

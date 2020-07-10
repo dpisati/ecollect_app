@@ -12,17 +12,18 @@ import * as Location from 'expo-location';
 interface Item {
   id: number;
   title: string;
-  mobile_url: string;
+  image_url: string;
 }
 
-interface Points {
+interface Point {
   id: number;
-  image: string;
-  mobile_url: string,
   name: string;
+  image: string;
+  image_url: string;
   latitude: number;
   longitude: number;
 }
+
 interface Params {
   uf: string;
   city: string;
@@ -30,7 +31,7 @@ interface Params {
 
 const Points = () => {
   const [items, setItems] = useState<Item[]>([]);
-  const [points, setPoints] = useState<Points[]>([]);
+  const [points, setPoints] = useState<Point[]>([]);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [initialPosition, setInitialPosition] = useState<[number, number]>([0 , 0]);
   const navigation = useNavigation();
@@ -53,7 +54,6 @@ const Points = () => {
         items: selectedItems
       }
     }).then(response => {
-      console.log(response.data);
       setPoints(response.data);
     })
   }, [selectedItems]);
@@ -75,7 +75,7 @@ const Points = () => {
     loadPosition();
   }, []);
 
-  function handleSelectItem(id: number) {
+  async function handleSelectItem(id: number) {
     const alreadySelected = selectedItems.findIndex(item => item === id);
     if (alreadySelected >= 0) {
         const filteredItems = selectedItems.filter(item => item !== id);
@@ -110,28 +110,31 @@ const Points = () => {
                           latitudeDelta: 0.010,
                           longitudeDelta: 0.010,
                        }} 
-                  >
-                    {points.map(point => (
-                        <Marker 
-                          key={String(point.id)}
-                          onPress={() => handleNavigateToDetail(point.id)}
-                          style={styles.mapMarker}
-                          coordinate={{ 
-                              latitude: point.latitude,
-                              longitude: point.longitude,  
-                          }} 
+                  > 
+                    
+                     {points.map((point) => (
+                      <Marker
+                        key={String(point.id)}
+                        style={styles.mapMarker}
+                        onPress={() => handleNavigateToDetail(point.id)}
+                        coordinate={{
+                          latitude: point.latitude,
+                          longitude: point.longitude,
+                        }}
                       >
-                          <View style={styles.mapMarkerContainer}>
-                              <Image 
-                                  style={styles.mapMarkerImage} 
-                                  source={{ uri: point.mobile_url }} 
-                              />
-                              <Text style={styles.mapMarkerTitle}>{point.name}</Text>
-                          </View>
+                        <View style={styles.mapMarkerContainer}>
+                          <Image
+                            style={styles.mapMarkerImage}
+                            source={{
+                              uri: point.image_url,
+                            }}
+                          />
+                          <Text style={styles.mapMarkerTitle}>{point.name}</Text>
+                        </View>
                       </Marker>
                     ))}
                   </MapView>
-                 ) }
+                 )}
                 </View>
             </View>
             <View style={styles.itemsContainer}>
@@ -149,7 +152,7 @@ const Points = () => {
                           selectedItems.includes(item.id) ? styles.selectedItem : {}
                         ]} 
                         onPress={() => handleSelectItem(item.id)}>
-                          <SvgUri width={42} height={42} uri={item.mobile_url} />
+                          <SvgUri width={42} height={42} uri={item.image_url} />
                           <Text style={styles.itemTitle}>{item.title}</Text>
                       </TouchableOpacity> 
                     ))}

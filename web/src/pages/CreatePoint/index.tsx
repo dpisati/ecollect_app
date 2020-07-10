@@ -120,6 +120,7 @@ const CreatePoint = () => {
     const city = selectedCity;
     const [latitude, longitude] = selectedPosition;
     const items = selectedItems;
+    
     const data = new FormData();
       data.append('name', name);
       data.append('email', email);
@@ -130,7 +131,7 @@ const CreatePoint = () => {
       data.append('longitude', String(longitude));
       data.append('items', items.join(','));
       if (selectedFile) {
-        data.append('image', selectedFile)
+        data.append('image', selectedFile);
       }
     
     await api.post("points", data);
