@@ -46,16 +46,16 @@ const CreatePoint = () => {
   ]);
   const history = useHistory();
 
-  useEffect(() => {
-    function initAddy() {
-      var addyComplete = new AddyComplete(
-        document.getElementById("address_line_1")
-      );
-      addyComplete.fields = {
-        address1: document.getElementById("address_line_1"),
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   function initAddy() {
+  //     var addyComplete = new AddyComplete(
+  //       document.getElementById("address_line_1")
+  //     );
+  //     addyComplete.fields = {
+  //       address1: document.getElementById("address_line_1"),
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     api.get("items").then((response) => {
@@ -219,13 +219,6 @@ const CreatePoint = () => {
               </select>
             </div>
             <div className="field">
-              <input
-                type="search"
-                className="field"
-                id="address_line_1"
-                placeholder="Start typing an address.."
-                auto-complete
-              />
               <label htmlFor="city">City</label>
               <select
                 name="city"
