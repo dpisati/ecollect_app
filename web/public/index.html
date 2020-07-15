@@ -21,17 +21,16 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      // This is the callback function to initialise the address lookup
       function initAddy() {
       var addyComplete = new AddyComplete(document.getElementById("address_line_1"));
-      addyComplete.fields = {
-      address1: document.getElementById("address_line_1"),
-      x: document.getElementById("x"),
-      y: document.getElementById("y"),
-      suburb: document.getElementById("suburb"),
-      city: document.getElementById("city"),
-      postcode: document.getElementById("postcode")
-      }
+        addyComplete.fields = {
+        address1: document.getElementById("address_line_1"),
+        x: document.getElementById("x"),
+        y: document.getElementById("y"),
+        suburb: document.getElementById("suburb"),
+        city: document.getElementById("city"),
+        postcode: document.getElementById("postcode")
+        }
       }
       </script>
       <script src="https://www.addy.co.nz/scripts/addy.js?key=c5d5722efb924aad9588470812c3d3ef&callback=initAddy&excludePostBox=false&maxItems=10" async defer></script>

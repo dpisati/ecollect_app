@@ -1,3 +1,5 @@
+
+
 #page-create-point {
     width: 100%;
     max-width: 1100px;
@@ -79,6 +81,8 @@
     margin-bottom: 24px;
   }
   
+
+
   #page-create-point form .field input[type=text],
   #page-create-point form .field input[type=search],
   #page-create-point form .field input[type=email],
@@ -201,4 +205,31 @@
   .items-grid li.selected {
     background: #E1FAEC;
     border: 2px solid #34CB79;
+  }
+
+  #x, #y, #suburb, #city, #postcode {
+    display: none;
+    opacity: 0;
+  }
+
+  .nc_list{
+    background-color: #F5F5F5;
+    list-style: none;
+    z-index: 9999;
+    width: 100%;
+    max-width: 602px;
+    border-radius: 5px;
+  }
+
+  .nc_item {
+    height: 52px;
+    font-size: 18px;
+    padding: 14px 14px 0px 14px;
+    border-radius: 5px;
+  }
+
+  .nc_hover {
+    background-color: #34CB79;
+    color: white;
+    cursor: pointer;
   }

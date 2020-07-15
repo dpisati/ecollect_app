@@ -3,12 +3,11 @@ import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import { LeafletMouseEvent } from "leaflet";
-import "./styles.css";
 import axios from "axios";
 import api from "../../services/api";
 import logo from "../../assets/logo.png";
-import { Console } from "console";
 import Dropzone from '../../components/Dropzone';
+import "./styles.css";
 
 interface Item {
   id: number;
@@ -196,12 +195,12 @@ const CreatePoint = () => {
           <div className="field-group">
             <div className="field">
               <label htmlFor="address"></label>
-              <input type="search" className="field" id="address_line_1" placeholder="Start typing an address.." auto-complete />
-              <input type="text" className="field" id="x"/>
-              <input type="text" className="field" id="y"/>
-              <input type="text" className="field" id="suburb"/>
-              <input type="text" className="field" id="city"/>
-              <input type="text" className="field" id="postcode"/>
+              <input type="search" className="field" id="address_line_1" placeholder="Start typing an address.." auto-complete onChange={handleInputChange} />
+              <input type="text"  id="x" name="latitude"/>
+              <input type="text"  id="y" name="logitude"/>
+              <input type="text"  id="suburb" name="suburb"/>
+              <input type="text"  id="city" name="city"/>
+              <input type="text"  id="postcode" name="postcode"/>
               {/* <label htmlFor="region">Region</label> */}
               {/* <select
                 onChange={handleSelectedRegion}
