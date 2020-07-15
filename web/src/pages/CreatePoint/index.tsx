@@ -175,11 +175,11 @@ const CreatePoint = () => {
               />
             </div>
             <div className="field">
-              <label htmlFor="whatsapp">Whatsapp</label>
+              <label htmlFor="phone">Phone</label>
               <input
                 type="text"
-                name="whatsapp"
-                id="whatsapp"
+                name="phone"
+                id="phone"
                 onChange={handleInputChange}
               />
             </div>
@@ -189,18 +189,17 @@ const CreatePoint = () => {
           <legend>
             <h2>Address</h2>
             <span>Type the address on the field below</span>
-          </legend> 
-    
-
+          </legend>
           <div className="field-group">
             <div className="field">
               <label htmlFor="address"></label>
               <input type="search" className="field" id="address_line_1" placeholder="Start typing an address.." auto-complete onChange={handleInputChange} />
-              <input type="text"  id="x" name="latitude"/>
-              <input type="text"  id="y" name="logitude"/>
-              <input type="text"  id="suburb" name="suburb"/>
-              <input type="text"  id="city" name="city"/>
-              <input type="text"  id="postcode" name="postcode"/>
+              <input type="text" id="x" name="latitude"/>
+              <input type="text" id="y" name="logitude"/>
+              <input type="text" id="region" name="region"/>
+              <input type="text" id="suburb" name="suburb"/>
+              <input type="text" id="city" name="city"/>
+              <input type="text" id="postcode" name="postcode"/>
               {/* <label htmlFor="region">Region</label> */}
               {/* <select
                 onChange={handleSelectedRegion}

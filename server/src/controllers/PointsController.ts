@@ -3,7 +3,7 @@ import knex from '../database/connection';
 
 class PointsController {
     async index(request: Request, response: Response) {
-        const { city, uf, items } = request.query;
+        const { city, region, items } = request.query;
         const parsedItems = String(items)
             .split(',')
             .map(item => Number(item.trim()));
@@ -11,7 +11,7 @@ class PointsController {
             .join('point_items', 'points.id', '=', 'point_items.point_id')
             .whereIn('point_items.item_id', parsedItems)
             .where('city', String(city))
-            .where('uf', String(uf))
+            .where('region', String(region))
             .distinct()
             .select('points.*');
 
@@ -47,11 +47,14 @@ class PointsController {
         const {
             name,
             email,
-            whatsapp,
+            phone,
             latitude,
             longitude,
+            address,
+            suburb,
             city,
-            uf,
+            region,
+            postcode,
             items
         } = request.body;
 
@@ -60,11 +63,14 @@ class PointsController {
             image: request.file.filename,
             name,
             email,
-            whatsapp,
+            phone,
             latitude,
             longitude,
+            address,
+            suburb,
             city,
-            uf
+            region,
+            postcode
         }
         const insertedIds = await trx('points').insert(point);
         const point_id = insertedIds[0];
