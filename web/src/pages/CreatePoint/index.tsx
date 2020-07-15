@@ -48,13 +48,13 @@ const CreatePoint = () => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const history = useHistory();
 
-  useEffect(() => {
+   useEffect(() => {
     api.get("items").then((response) => {
       setItems(response.data);
     });
   }, []);
 
-  useEffect(() => {
+   useEffect(() => {
     axios
       .get<nameResponse[]>(
         "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
@@ -189,20 +189,21 @@ const CreatePoint = () => {
         <fieldset>
           <legend>
             <h2>Address</h2>
-            <span>Select the address on map</span>
-          </legend>
+            <span>Type the address on the field below</span>
+          </legend> 
+    
 
-          <Map center={initialPosition} zoom={15} onClick={handleMapClick}>
-            <TileLayer
-              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={selectedPosition} />
-          </Map>
           <div className="field-group">
             <div className="field">
-              <label htmlFor="region">Region</label>
-              <select
+              <label htmlFor="address"></label>
+              <input type="search" className="field" id="address_line_1" placeholder="Start typing an address.." auto-complete />
+              <input type="text" className="field" id="x"/>
+              <input type="text" className="field" id="y"/>
+              <input type="text" className="field" id="suburb"/>
+              <input type="text" className="field" id="city"/>
+              <input type="text" className="field" id="postcode"/>
+              {/* <label htmlFor="region">Region</label> */}
+              {/* <select
                 onChange={handleSelectedRegion}
                 value={selectedRegion}
                 name="region"
@@ -230,9 +231,17 @@ const CreatePoint = () => {
                     {city}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
+            
           </div>
+          <Map center={initialPosition} zoom={15} onClick={handleMapClick}>
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={selectedPosition} />
+          </Map>
         </fieldset>
         <fieldset>
           <legend>
