@@ -15,16 +15,27 @@ interface Item {
   image_url: string;
 }
 
-interface nameResponse {
-  sigla: string;
+interface Address {
+  id: number;
+  a: string;
 }
+
+interface RootObject {
+  matched: number;
+  addresses: Address[];
+  badwords: any[];
+  q?: any;
+}
+
 
 interface cityResponse {
   nome: string;
 }
 
+
 const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([]);
+  const [address, setAddress] = useState<string[]>([]);
   const [region, setRegion] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
   const [initialPosition, setinitialPosition] = useState<[number, number]>([
@@ -34,7 +45,14 @@ const CreatePoint = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    whatsapp: "",
+    phone: "",
+    address: "",
+    suburb: "",
+    city: "",
+    region: "",
+    postcode: "",
+    latitude: "",
+    longitude: ""
   });
 
   const [selectedRegion, setSelectedRegion] = useState("0");
@@ -53,16 +71,16 @@ const CreatePoint = () => {
     });
   }, []);
 
-   useEffect(() => {
-    axios
-      .get<nameResponse[]>(
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-      )
-      .then((response) => {
-        const regionNames = response.data.map((name) => name.sigla);
-        setRegion(regionNames);
-      });
-  }, []);
+  //  useEffect(() => {
+  //   axios
+  //     .get<nameResponse[]>(
+  //       "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+  //     )
+  //     .then((response) => {
+  //       const regionNames = response.data.map((name) => name.sigla);
+  //       setRegion(regionNames);
+  //     });
+  // }, []);
 
   useEffect(() => {
     if (selectedRegion === "0") {
@@ -85,6 +103,23 @@ const CreatePoint = () => {
     });
   }, []);
 
+  function handleInputAddress(event: ChangeEvent<HTMLInputElement>) {
+    const addressInput = event.target.value;
+    if (addressInput.length > 3) {
+      axios
+      .get<RootObject>(
+      // .get(
+        `https://api.addy.co.nz/search?key=c5d5722efb924aad9588470812c3d3ef&s=${addressInput}`
+      )
+      .then((response) => {
+          const addressOptions = response.data.addresses.map((address) => address.a);
+          setAddress(addressOptions);
+          console.log(addressOptions);
+      });
+    }
+    
+  }
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData({
@@ -92,6 +127,7 @@ const CreatePoint = () => {
       [name]: value,
     });
   }
+
   function handleSelectItem(id: number) {
     const alreadySelected = selectedItems.findIndex((item) => item === id);
     if (alreadySelected >= 0) {
@@ -101,37 +137,40 @@ const CreatePoint = () => {
       setSelectedItems([...selectedItems, id]);
     }
   }
-  function handleSelectedRegion(event: ChangeEvent<HTMLSelectElement>) {
-    const region = event.target.value;
-    setSelectedRegion(region);
-  }
-  function handleSelectedCity(event: ChangeEvent<HTMLSelectElement>) {
-    const city = event.target.value;
-    setSelectedCity(city);
-  }
+  // function handleSelectedRegion(event: ChangeEvent<HTMLSelectElement>) {
+  //   const region = event.target.value;
+  //   setSelectedRegion(region);
+  // }
+  // function handleSelectedCity(event: ChangeEvent<HTMLSelectElement>) {
+  //   const city = event.target.value;
+  //   setSelectedCity(city);
+  // }
   function handleMapClick(event: LeafletMouseEvent) {
     setSelectedPosition([event.latlng.lat, event.latlng.lng]);
   }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const { name, email, whatsapp } = formData;
-    const uf = selectedRegion;
-    const city = selectedCity;
-    const [latitude, longitude] = selectedPosition;
+    const { name, email, address, phone, latitude, longitude, suburb, city, region, postcode  } = formData;
+    // const uf = selectedRegion;
+    // const city = selectedCity;
+    // const [latitude, longitude] = selectedPosition;
     const items = selectedItems;
     
     const data = new FormData();
       data.append('name', name);
       data.append('email', email);
-      data.append('whatsapp', whatsapp);
-      data.append('uf', uf);
-      data.append('city', city);
+      data.append('phone', phone);
       data.append('latitude', String(latitude));
       data.append('longitude', String(longitude));
+      data.append('address', address);
+      data.append('suburb', suburb);
+      data.append('city', city);
+      data.append('region', region);
+      data.append('postcode', postcode);
       data.append('items', items.join(','));
       if (selectedFile) {
         data.append('image', selectedFile);
-      }
+      } 
     
     await api.post("points", data);
     history.push("/success");
@@ -193,13 +232,8 @@ const CreatePoint = () => {
           <div className="field-group">
             <div className="field">
               <label htmlFor="address"></label>
-              <input type="search" className="field" id="address_line_1" placeholder="Start typing an address.." auto-complete onChange={handleInputChange} />
-              <input type="text" id="x" name="latitude"/>
-              <input type="text" id="y" name="logitude"/>
-              <input type="text" id="region" name="region"/>
-              <input type="text" id="suburb" name="suburb"/>
-              <input type="text" id="city" name="city"/>
-              <input type="text" id="postcode" name="postcode"/>
+              {/* <input type="search" className="field" id="address" name="address" placeholder="Start typing an address.." auto-complete onChange={handleInputAddress} /> */}
+              <input type="text" className="field" name="address" placeholder="TEST..." onChange={handleInputAddress} />
               {/* <label htmlFor="region">Region</label> */}
               {/* <select
                 onChange={handleSelectedRegion}
@@ -230,7 +264,24 @@ const CreatePoint = () => {
                   </option>
                 ))}
               </select> */}
-            </div>
+              <div className="field">
+              <label htmlFor="city">City</label>
+              <select
+                name="city"
+                id="city"
+                value={selectedCity}
+
+              >
+                <option value="0">Select one address</option>
+                {address.map((address) => (
+                  <option key={address} value={address}>
+                    {address}
+                  </option>
+                ))}
+              </select> 
+              </div>
+
+            </div>           
             
           </div>
           <Map center={initialPosition} zoom={15} onClick={handleMapClick}>

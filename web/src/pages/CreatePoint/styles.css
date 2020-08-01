@@ -207,9 +207,9 @@
     border: 2px solid #34CB79;
   }
 
-  #x, #y, #suburb, #city, #postcode, #region {
+  /* #x, #y, #suburb, #city, #postcode, #region {
     display: none;
-  }
+  } */
 
   .nc_list{
     background-color: #F5F5F5;
