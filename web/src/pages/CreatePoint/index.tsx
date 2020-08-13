@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import React, { useEffect, useState, ChangeEvent, FormEvent, MouseEvent } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { Map, TileLayer, Marker } from "react-leaflet";
@@ -18,6 +18,19 @@ interface Item {
 interface Address {
   id: number;
   a: string;
+}
+
+interface FinalAddressRes {
+  address: FinalAddress;
+}
+interface FinalAddress {
+  full: string;
+  city: string;
+  region: string;
+  postcode: string;
+  suburb: string;
+  x: string;
+  y: string;
 }
 
 interface RootObject {
@@ -103,18 +116,35 @@ const CreatePoint = () => {
     });
   }, []);
 
+  function handleSelectAddress(event: MouseEvent<HTMLOptionElement>) {
+    event.preventDefault();    
+    setAddress([""]);
+    console.log(event.currentTarget.value);
+    axios
+    .get<FinalAddressRes>(
+      `https://api.addy.co.nz/validation?key=c5d5722efb924aad9588470812c3d3ef&address=${event.currentTarget.value}`
+    )
+    .then((response) => {
+        const addressOptions = response.data.address;
+        console.log(addressOptions);
+    });
+    setFormData({
+      ...formData,
+      address: event.currentTarget.value,
+    });
+    
+  }
+
   function handleInputAddress(event: ChangeEvent<HTMLInputElement>) {
     const addressInput = event.target.value;
     if (addressInput.length > 3) {
       axios
       .get<RootObject>(
-      // .get(
         `https://api.addy.co.nz/search?key=c5d5722efb924aad9588470812c3d3ef&s=${addressInput}`
       )
       .then((response) => {
           const addressOptions = response.data.addresses.map((address) => address.a);
           setAddress(addressOptions);
-          console.log(addressOptions);
       });
     }
     
@@ -232,57 +262,23 @@ const CreatePoint = () => {
           <div className="field-group">
             <div className="field">
               <label htmlFor="address"></label>
-              {/* <input type="search" className="field" id="address" name="address" placeholder="Start typing an address.." auto-complete onChange={handleInputAddress} /> */}
-              <input type="text" className="field" name="address" placeholder="TEST..." onChange={handleInputAddress} />
-              {/* <label htmlFor="region">Region</label> */}
-              {/* <select
-                onChange={handleSelectedRegion}
-                value={selectedRegion}
-                name="region"
-                id="region"
-              >
-                <option value="0">Select one region</option>
-                {region.map((region) => (
-                  <option key={region} value={region}>
-                    {region}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="field">
-              <label htmlFor="city">City</label>
-              <select
-                name="city"
-                id="city"
-                value={selectedCity}
-                onChange={handleSelectedCity}
-              >
-                <option value="0">Select one city</option>
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select> */}
-              <div className="field">
-              <label htmlFor="city">City</label>
-              <select
-                name="city"
-                id="city"
-                value={selectedCity}
+              <input id="addressInput" type="text" className="field address-main" name="address" placeholder="Type your address..." onChange={handleInputAddress} />
 
-              >
-                <option value="0">Select one address</option>
+              <div>
+                
                 {address.map((address) => (
-                  <option key={address} value={address}>
+                  <option key={address} value={address} className={address.length === 0 ? "" : "address-option"} onClick={handleSelectAddress}>
                     {address}
                   </option>
-                ))}
-              </select> 
+                ))
+                }
               </div>
 
-            </div>           
-            
+
+            </div>
+
+
+
           </div>
           <Map center={initialPosition} zoom={15} onClick={handleMapClick}>
             <TileLayer

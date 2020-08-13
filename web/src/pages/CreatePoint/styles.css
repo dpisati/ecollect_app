@@ -232,3 +232,19 @@
     color: white;
     cursor: pointer;
   }
+
+  .address-main {
+    position: relative;
+    margin-bottom: 0px !important;
+  }
+  .address-option {
+    line-height: 3rem;
+    background-color: #F0F0F5;
+    padding-left: 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .address-option:hover {
+    background-color: #2FB86E;
+    color: white;
+  }
