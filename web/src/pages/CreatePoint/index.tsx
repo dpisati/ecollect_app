@@ -142,10 +142,16 @@ const CreatePoint = () => {
           Number(response.data.address.y),
           Number(response.data.address.x),
         ]);
+        setFormData({
+          ...formData,
+          address: response.data.address.full,
+          suburb: response.data.address.suburb,
+          city: response.data.address.city,
+          region: response.data.address.region,
+          postcode: response.data.address.postcode,
+          latitude: response.data.address.x,
+          longitude: response.data.address.y,
       });
-    setFormData({
-      ...formData,
-      address: event.currentTarget.value,
     });
   }
 
@@ -190,9 +196,9 @@ const CreatePoint = () => {
   //   const city = event.target.value;
   //   setSelectedCity(city);
   // }
-  function handleMapClick(event: LeafletMouseEvent) {
-    setSelectedPosition([event.latlng.lat, event.latlng.lng]);
-  }
+  // function handleMapClick(event: LeafletMouseEvent) {
+  //   setSelectedPosition([event.latlng.lat, event.latlng.lng]);
+  // }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const {
@@ -311,7 +317,8 @@ const CreatePoint = () => {
               </div>
             </div>
           </div>
-          <Map center={initialPosition} zoom={15} onClick={handleMapClick}>
+          {/* <Map center={initialPosition} zoom={15} onClick={handleMapClick}> */}
+          <Map center={initialPosition} zoom={15}>
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
