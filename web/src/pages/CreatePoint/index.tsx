@@ -19,6 +19,7 @@ interface Item {
   id: number;
   title: string;
   image_url: string;
+  web_image_url: string;
 }
 
 interface Address {
@@ -151,8 +152,8 @@ const CreatePoint = () => {
           postcode: response.data.address.postcode,
           latitude: response.data.address.x,
           longitude: response.data.address.y,
+        });
       });
-    });
   }
 
   function handleInputAddress(event: ChangeEvent<HTMLInputElement>) {
@@ -338,7 +339,7 @@ const CreatePoint = () => {
                 onClick={() => handleSelectItem(item.id)}
                 className={selectedItems.includes(item.id) ? "selected" : ""}
               >
-                <img src={item.image_url} alt={item.title} />
+                <img src={item.web_image_url} alt={item.title} />
                 <span>{item.title}</span>
               </li>
             ))}
