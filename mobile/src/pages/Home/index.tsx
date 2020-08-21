@@ -31,7 +31,7 @@ const Home = () => {
                 </View>
             </View>
             <View style={styles.footer}>
-                <TextInput 
+                {/* <TextInput 
                   style={styles.input} 
                   placeholder="Type the UF"
                   value={uf}
@@ -44,7 +44,7 @@ const Home = () => {
                   value={city}
                   onChangeText={setCity}
                   autoCorrect={false}
-                />
+                /> */}
                 <RectButton style={styles.button} onPress={handleNavigateToPoints}>
                     <View style={styles.buttonIcon}>
                         <Text>

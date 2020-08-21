@@ -150,8 +150,8 @@ const CreatePoint = () => {
           city: response.data.address.city,
           region: response.data.address.region,
           postcode: response.data.address.postcode,
-          latitude: response.data.address.x,
-          longitude: response.data.address.y,
+          latitude: response.data.address.y,
+          longitude: response.data.address.x,
         });
       });
   }

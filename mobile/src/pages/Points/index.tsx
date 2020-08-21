@@ -49,12 +49,13 @@ const Points = () => {
   useEffect(() => {
     api.get('points', {
       params: {
-        city: routeParams.city,
-        uf: routeParams.uf,
+        // city: routeParams.city,
+        // uf: routeParams.uf,
         items: selectedItems
       }
     }).then(response => {
       setPoints(response.data);
+      console.log("pontos retornados pela api", points)
     })
   }, [selectedItems]);
 
@@ -111,8 +112,7 @@ const Points = () => {
                           longitudeDelta: 0.010,
                        }} 
                   > 
-                    
-                     {points.map((point) => (
+                   {points.map((point) => (
                       <Marker
                         key={String(point.id)}
                         style={styles.mapMarker}

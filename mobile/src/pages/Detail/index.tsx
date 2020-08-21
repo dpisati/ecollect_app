@@ -16,10 +16,11 @@ interface Data {
     name: string;
     image: string;
     image_url: string;
-    whatsapp: string;
+    phone: string;
     email: string;
     city: string;
-    uf: string;
+    region: string;
+    address: string;
   };
   items: {
     title: string;
@@ -67,8 +68,8 @@ const Detail = () => {
                     <Text style={styles.pointName}>{data.point.name}</Text>
                     <Text style={styles.pointItems}>{data.items.map(item => item.title).join(', ')}</Text>
                 <View style={styles.address}>
-                    <Text style={styles.addressTitle}>{data.point.city}</Text>
-                    <Text style={styles.addressContent}>{data.point.uf}</Text>
+                    <Text style={styles.addressTitle}>{data.point.address}</Text>
+                    <Text style={styles.addressContent}>{data.point.region}</Text>
                 </View>
             </View>
             <View style={styles.footer}>
