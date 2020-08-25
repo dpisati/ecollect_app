@@ -46,8 +46,7 @@ The project is made with:
 ## :heavy_check_mark: :iphone: Mobile
 
 <h1 align="center">
-    <!-- <img alt="Mobile Home" src=".github/Home.png" width="300px"> -->
-    <img alt="Mobile Detail" src=".github/ecollect_app.svg" width="300px">
+    <img alt="Mobile Detail" src=".github/ecollect_app.gif" width="300px">
 </h1>
 
 <a id="how-to-use"></a>
